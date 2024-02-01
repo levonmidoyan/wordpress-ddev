@@ -11,12 +11,12 @@ But before you start make sure you have installed these CLIs:
 - ahoy CLI. Check the GitHub [repository](https://github.com/ahoy-cli/ahoy) 
 
 ```bash
-$ ahoy init
+ahoy init
 ```
 After initialization run this command:
 
 ```bash
-$ ahoy start
+ahoy start
 ```
 
 That's it.
