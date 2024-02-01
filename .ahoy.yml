@@ -1,0 +1,83 @@
+ahoyapi: v2
+
+commands:
+  ########
+  # BEGIN MAIN COMMANDS
+  ########
+
+  start:
+    usage: Starts the local site and possibly run initial setup.
+    cmd: ddev start && ahoy maybe-init
+
+  stop:
+    usage: Stops the local site.
+    cmd: ddev stop
+
+  restart:
+    usage: Restarts the local site.
+    cmd: ddev restart && ahoy maybe-init
+
+  remove:
+    usage: Removes the local site db + containers.
+    cmd: ddev delete --omit-snapshot --yes
+
+  db:
+    usage: Imports a WP Vip db backup file from S3.
+    cmd: source .ddev/setup/commands/wp.sh && doDB
+
+  #npm-info:
+  #  usage: Runs a NPM command in the main Theme
+  #  cmd: ddev exec "npm run $@ --prefix themes/info-hotb"
+
+  #blocks:
+  #  usage: Runs a NPM command in nuedu-blocks plugins/nuedu-blocks
+  #  cmd: ddev exec "npm run $@ --prefix plugins/nuedu-blocks"
+
+  ssh:
+    usage: Log into the web container to run commands.
+    cmd: ddev ssh
+
+  wp:
+    usage: Runs wp cli from the web container. Note here just sending --version here won't work! Try "ahoy wp cache flush".
+    cmd: ddev exec "wp $@"
+
+  wp-debug:
+    usage: Starts or Stops WP_DEBUG. wp-debug true|false.
+    cmd: ddev exev "wp config set WP_DEBUG $1 --raw"
+
+  ########
+  # END MAIN COMMANDS
+  ########
+
+  init:
+    usage: Handle initial setup to get your local working.
+    cmd: source .ddev/setup/commands/wp.sh && doInit
+
+  db-import:
+    usage: Imports database dump file.
+    cmd: ddev exec "pv $1 | mysql -h db -u root -proot db"
+
+  db-export:
+    usage: Exports db.
+    cmd: |
+      date=$(date '+%Y-%m-%d') && ddev exec "mysqldump -h db -u root -proot db | pv -W > .ddev/db/${date}.sql" && echo "Exported sql file to: .ddev/db/${date}.sql"
+
+  db-optimize:
+    usage: Optmize all tables in the db.
+    cmd: ddev exec "mysqlcheck -u root -proot -h db -o db"
+
+  snapshot-create:
+    usage: Create and compress a snapshot. These snapshots are stored in .ddev/db_snapshots. The folders + files in this directory can be deleted at any point, if you don't need those snapshots.
+    cmd: ddev snapshot --name $1 && cd .ddev/db_snapshots && echo "Creating compressed file..." && tar -czf ${1}.tar.gz ${1} && rm -f -R ${1}
+
+  snapshot-restore:
+    usage: Restores a snapshot created from ahoy snapshot-create.
+    cmd: cd .ddev/db_snapshots && rm -f -R ${1} && echo "Extracting compressed file..." && tar -xzf ${1}.tar.gz && echo "Restoring snapshot..." && ddev snapshot restore ${1}
+
+  maybe-init:
+    usage: Only runs ahoy init if the web directory doesn't exist.
+    cmd: \[ ! -d "web/wp-admin" \] && ahoy init
+
+  run:
+    usage: Runs commands in the ddev container.
+    cmd: ddev exec "$@"
