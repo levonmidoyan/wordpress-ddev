@@ -21,8 +21,14 @@ ahoy start
 
 That's it.
 
+The local domain for your WordPress site is
+```
+https://wpfordev.ddev.site
+```
+
 > [!NOTE]
-> The local domain for your WordPress site will be created from the name of the directory that contain the project.
+> You can change the domain from **/.ddev/config.yaml** file
+
 
 ### Author
 Levon Midoyan - [@levonmidoyan](https://github.com/levonmidoyan)
