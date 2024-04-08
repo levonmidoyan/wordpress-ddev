@@ -37,10 +37,19 @@ function doInit() {
   # Make sure this file exists. If it doesn't, maybe no internet?
   if test -f "./latest.zip"; then
     rm -R -f ./${DOC_ROOT} && mkdir ./${DOC_ROOT} && mv ./wordpress/* ./${DOC_ROOT} && rmdir ./wordpress/ && rm -f ./latest.zip
-    rm -R -f ./${DOC_ROOT}/wp-content/plugins && rm -R -f ./${DOC_ROOT}/wp-content/themes
+
+    # Coping plugins and themes
+    cd "${DOC_ROOT}/wp-content"
+    progressMessage "Coping default plugins..."
+    cp -a ./plugins/. ../../plugins/
+
+    progressMessage "Coping default themes..."
+    cp -a ./themes/. ../../themes/
+
+    # Removing plugins and themes directories from wp-content
+    rm -R -f ./plugins && rm -R -f ./themes
 
     # Create symbolic links.
-    cd "${DOC_ROOT}/wp-content"
     ln -s ../../plugins plugins
     ln -s ../../themes themes
     mkdir uploads && chmod -R 0777 uploads
@@ -48,6 +57,8 @@ function doInit() {
     # Go back into the project directory.
     cd ../../
   fi
+
+  progressMessage "Finishing setup..."
 
   # Handle config files.
   doConfigFiles
