@@ -23,11 +23,19 @@ That's it.
 
 The local domain for your WordPress site is
 ```
-https://wpfordev.ddev.site
+https://{project-name}.ddev.site
 ```
 
 > [!NOTE]
-> You can change the domain from **/.ddev/config.yaml** file
+> You can change project name (the domain) from **/.ddev/config.yaml** file
+
+#### Database
+```dotenv
+HOST=db
+USERNAME=root
+PASSWORD=root
+PORT=3306
+```
 
 
 ### Author

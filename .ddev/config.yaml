@@ -1,4 +1,4 @@
-name: wpfordev
+name: project-name
 type: wordpress
 docroot: web
 php_version: "8.1"
@@ -8,11 +8,11 @@ additional_hostnames: []
 additional_fqdns: []
 database:
     type: mariadb
-    version: "10.4"
+    version: "10.6"
 use_dns_when_possible: true
 composer_version: "2"
 web_environment: []
-nodejs_version: "18"
+nodejs_version: "20"
 timezone: Asia/Yerevan
 
 # Key features of DDEV's config.yaml:
